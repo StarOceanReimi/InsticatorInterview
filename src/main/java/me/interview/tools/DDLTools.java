@@ -1,19 +1,7 @@
 package me.interview.tools;
 
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.boot.registry.internal.StandardServiceRegistryImpl;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.hibernate.tool.hbm2ddl.TargetTypeHelper;
-import org.hibernate.tool.schema.TargetType;
-import org.hibernate.tool.schema.internal.exec.ScriptSourceInputNonExistentImpl;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
+import static java.util.stream.Collectors.toSet;
 
-import javax.persistence.Entity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
@@ -23,7 +11,19 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toSet;
+import javax.persistence.Entity;
+
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.boot.registry.internal.StandardServiceRegistryImpl;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.hbm2ddl.TargetTypeHelper;
+import org.hibernate.tool.schema.TargetType;
+import org.hibernate.tool.schema.spi.SchemaManagementException;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 /**
  * Created by reimi on 11/18/17.
@@ -77,8 +77,11 @@ public class DDLTools {
 	        export.setHaltOnError(true)
               .setFormat(false);
 	        EnumSet<TargetType> types = TargetTypeHelper.parseCommandLineOptions("database,stdout");
-//	        export.drop(types, meta);
-        	export.create(types, meta);
+	        try {
+	        	export.create(types, meta);
+	        } catch (SchemaManagementException e) {
+	        	export.createOnly(types, meta);
+			}
         } finally {
         	if(sources != null)
         		((StandardServiceRegistryImpl)sources.getServiceRegistry()).destroy();	

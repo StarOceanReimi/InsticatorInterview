@@ -79,7 +79,7 @@ public class QuestionDAOTest {
 	@Test
 	public void testOrder() {
 		testInsert();
-		testAnswer();
+//		testAnswer();
 	}
 	
 	public void testInsert() {

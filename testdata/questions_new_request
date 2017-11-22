@@ -1,8 +1,21 @@
 [
 	//these are for brand new question insert into db
 	{
-		title : "What is the best tech company",
+		title : "hich team won the 2017 super bowl?",
 		type : 'trivia',
+		answers : [{
+			index : {
+				name : "Winner Team 2017",
+				values : [
+					{ name : 'Falcons' },
+					{ name : 'Patriots', suggested: true }
+				]
+			}
+		}]
+	},
+	{
+		title : "What is your favorite tech company?",
+		type : 'poll',
 		answers : [{
 			index : {
 				name : "Tech Company",

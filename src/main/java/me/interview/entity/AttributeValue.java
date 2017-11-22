@@ -40,6 +40,8 @@ public class AttributeValue implements IDAware<Long> {
 	@JoinColumn(name="owner_id", nullable = false)
 	private Attribute owner;
 	
+	private boolean suggested;
+	
 	@Column(nullable = false)
 	private String name;
 
@@ -76,4 +78,11 @@ public class AttributeValue implements IDAware<Long> {
 		this.name = name;
 	}
 
+	public boolean isSuggested() {
+		return suggested;
+	}
+
+	public void setSuggested(boolean suggested) {
+		this.suggested = suggested;
+	}
 }
