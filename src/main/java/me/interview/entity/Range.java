@@ -11,6 +11,9 @@ public class Range extends AttributeValue {
 	
 	private Double end;
 
+	public Range() {
+	}
+	
 	public Range(String name, Double start, Double end) {
 		super(name);
 		this.start = start;

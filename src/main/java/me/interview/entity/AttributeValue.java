@@ -12,6 +12,20 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+
+@JsonTypeInfo(use=com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME,
+			  include=As.PROPERTY,
+			  property="type",
+			  defaultImpl=Category.class)
+@JsonSubTypes({
+	@Type(value=Category.class, name="category"),
+	@Type(value=Range.class,    name="range")
+})
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="type", discriminatorType=DiscriminatorType.STRING)
@@ -21,11 +35,12 @@ public class AttributeValue implements IDAware<Long> {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="owner_id", nullable = false)
 	private Attribute owner;
 	
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private String name;
 
 	public AttributeValue() {
@@ -60,6 +75,5 @@ public class AttributeValue implements IDAware<Long> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
 }

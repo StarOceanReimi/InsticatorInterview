@@ -20,7 +20,7 @@ public class Answer implements IDAware<Long> {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="question_id", nullable=false)
 	private Question question;
 	
@@ -58,6 +58,14 @@ public class Answer implements IDAware<Long> {
 
 	public void setIndex(Attribute index) {
 		this.index = index;
+	}
+	
+	public Question getQuestion() {
+		return question;
+	}
+	
+	public void setQuestion(Question question) {
+		this.question = question;
 	}
 
 	public Set<Attribute> getColumns() {

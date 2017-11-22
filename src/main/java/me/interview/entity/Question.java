@@ -3,6 +3,7 @@ package me.interview.entity;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -27,7 +28,7 @@ public class Question implements IDAware<Long> {
 	@Column(nullable=false)
 	private QuestionType type;
 	
-	@OneToMany(mappedBy="question", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="question", fetch=FetchType.EAGER, cascade={CascadeType.PERSIST})
 	private Set<Answer> answers;
 	
 	@Column

@@ -7,5 +7,6 @@ import javax.persistence.Entity;
 @DiscriminatorValue("CATEGORY")
 public class Category extends AttributeValue {
 
-	
+	public Category() {
+	}
 }

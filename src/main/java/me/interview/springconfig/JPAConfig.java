@@ -1,8 +1,12 @@
 package me.interview.springconfig;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
+import java.util.Properties;
 
-import me.interview.tools.CipherTools;
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,26 +16,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.*;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.nio.file.Paths;
-import java.util.Enumeration;
-import java.util.Properties;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+import me.interview.tools.CipherTools;
 
 /**
  * Created by reimi on 11/18/17.
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "me.springbootlearn.repository")
+@EnableJpaRepositories(basePackages = "me.interview.repository")
 @EnableTransactionManagement
 public class JPAConfig {
 
@@ -83,24 +84,14 @@ public class JPAConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Value("project-pu") String unitName, DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPackagesToScan("me.interview.eneity");
+        factoryBean.setPackagesToScan("me.interview.entity");
         factoryBean.setDataSource(dataSource);
         factoryBean.setJpaDialect(new HibernateJpaDialect());
         factoryBean.setPersistenceUnitName(unitName);
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setShowSql(true);
         factoryBean.setJpaVendorAdapter(vendorAdapter);
-        factoryBean.setJpaProperties(additionalHibernateProperties());
         return factoryBean;
-    }
-
-    public Properties additionalHibernateProperties() {
-        Properties properties = new Properties();
-        String path = Paths.get(System.getProperty("user.dir"), "lucene_index").toString();
-        properties.setProperty("hibernate.search.default.directory_provider", "filesystem");
-        properties.setProperty("hibernate.search.default.indexBase", path + "/");
-        LOGGER.info("LUCENE BASE PATH: {}", path);
-        return properties;
     }
 
     @Bean

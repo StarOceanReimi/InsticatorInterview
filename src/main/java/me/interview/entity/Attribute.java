@@ -2,12 +2,16 @@ package me.interview.entity;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Attribute implements IDAware<Long>, UniqueNameAware {
@@ -16,9 +20,11 @@ public class Attribute implements IDAware<Long>, UniqueNameAware {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(unique=true, nullable=false)
 	private String name;
 	
-	@OneToMany(mappedBy="owner", fetch=FetchType.EAGER)
+	@JsonManagedReference
+	@OneToMany(mappedBy="owner", fetch=FetchType.EAGER, cascade={CascadeType.PERSIST})
 	private Set<AttributeValue> values;
 
 	public Long getId() {
