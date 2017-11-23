@@ -1,6 +1,8 @@
 package me.interview.entity;
 
-public interface IDAware<ID> {
+import java.io.Serializable;
+
+public interface IDAware<ID> extends Serializable {
 
 	ID getId();
 	

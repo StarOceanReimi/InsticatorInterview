@@ -1,31 +1,41 @@
 [
 	{
-		id: 1,
-		checkedValues : [
-			{ id : 1 }
+		question : { id : 1 },
+		answers :  [
+			{ index : { id : 2 } }
 		]
 	},
+	
 	{
-		id : 2,
-		checkedValues : [ 
-			{ id : 6 }, 
-			{ id : 7 } 
+		question : { id : 1 },
+		answers :  [
+			{ index : { id : 1 } }
 		]
 	},
+	
 	{
-		id : 3,
-		checkedValues :  [
-			{ id : 10 }, 
-			{ id : 12 },
-			{ id : 13 },
-			{ id : 14 }
+		question : { id : 1 },
+		sourceInfo : "comes from XXX",
+		answers : [
+			{ index : { id : 1 } }
 		]
-	}, 
+	},
+	
 	{
-		id : 4,
-		checkedValues : [ 
-			{ id : 18 } ,
-			{ id : 19 } 
+		question : { id : 5 },
+		sourceInfo : "www.baidu.com",
+		answers : [
+			{ index : { id : 20 }, column : { id : 17 } }
+		]
+	},
+	
+	{
+		question : { id : 4 },
+		answers : [
+			{ index : { id : 11 } },
+			{ index : { id : 12 } },
+			{ index : { id : 13 } },
+			{ index : { id : 16 } }
 		]
 	}
 ]

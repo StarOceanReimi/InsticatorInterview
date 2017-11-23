@@ -12,10 +12,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Question implements IDAware<Long> {
+
+	private static final long serialVersionUID = 6693600677353178383L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -27,9 +32,22 @@ public class Question implements IDAware<Long> {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable=false)
 	private QuestionType type;
+
+	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST})
+	@JoinColumn(name="index_id", nullable=false)
+	private OptionGroup index;
 	
-	@OneToMany(mappedBy="question", fetch=FetchType.EAGER, cascade={CascadeType.PERSIST})
-	private Set<Answer> answers;
+	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST})
+	@JoinColumn(name="column_id")
+	private OptionGroup column;
+	
+	@ManyToMany(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST})
+	@JoinTable(
+		name="questiontags",
+		joinColumns=@JoinColumn(name="question_id", nullable=false, referencedColumnName="id"),
+		inverseJoinColumns=@JoinColumn(name="tag_id", nullable=false, referencedColumnName="id")
+	)
+	private Set<Tag> tags;
 	
 	@Column
 	private LocalDateTime createTime;
@@ -50,14 +68,6 @@ public class Question implements IDAware<Long> {
 		this.title = title;
 	}
 
-	public Set<Answer> getAnswers() {
-		return answers;
-	}
-
-	public void setAnswers(Set<Answer> answers) {
-		this.answers = answers;
-	}
-
 	public LocalDateTime getCreateTime() {
 		return createTime;
 	}
@@ -72,5 +82,29 @@ public class Question implements IDAware<Long> {
 
 	public void setType(QuestionType type) {
 		this.type = type;
+	}
+
+	public OptionGroup getIndex() {
+		return index;
+	}
+
+	public void setIndex(OptionGroup index) {
+		this.index = index;
+	}
+
+	public OptionGroup getColumn() {
+		return column;
+	}
+
+	public void setColumn(OptionGroup column) {
+		this.column = column;
+	}
+
+	public Set<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
 	}
 }

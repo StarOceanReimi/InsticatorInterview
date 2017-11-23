@@ -3,88 +3,73 @@
 	{
 		title : "hich team won the 2017 super bowl?",
 		type : 'trivia',
-		answers : [{
-			index : {
-				name : "Winner Team 2017",
-				values : [
-					{ name : 'Falcons' },
-					{ name : 'Patriots', suggested: true }
-				]
-			}
-		}]
+		index : {
+			options : [
+				{ name : 'Falcons' },
+				{ name : 'Patriots', suggested: true }
+			]
+		}
 	},
 	{
 		title : "What is your favorite tech company?",
 		type : 'poll',
-		answers : [{
-			index : {
-				name : "Tech Company",
-				values : [
-					{ name : 'Apple' },
-					{ name : 'Google' },
-					{ name : 'BaiDu' },
-					{ name : 'Tencent' }
-				]
-			}
-		}]
+		index : {
+			name : "Tech Company",
+			options : [
+				{ name : 'Apple' },
+				{ name : 'Google' },
+				{ name : 'BaiDu' },
+				{ name : 'Tencent' }
+			]
+		}
 	},
 	
 	{
 		title : "What's your favorite car brand?",
 		type : "poll",
-		answers : [{
-			index : {
-				name : "Car brand",
-				values : [
-					{ name : 'Nissan'},
-					{ name : 'Honda'},
-					{ name : 'Audi'},
-					{ name : 'BMW'}
-				]
-			}
-		}]
+		index : {
+			options : [
+				{ name : 'Nissan'},
+				{ name : 'Honda'},
+				{ name : 'Audi'},
+				{ name : 'BMW'}
+			]
+		}
 	},
 	
 	{
 		title : "What are the colors do you like?",
 		type : "checkbox",
-		answers : [{
-			index : {
-				name : "General Colors",
-				values : [
-					{ name : 'Red'},
-					{ name : 'Blue'},
-					{ name : 'Yellow'},
-					{ name : 'Green'},
-					{ name : 'Black'},
-					{ name : 'Purple'}
-				]
-			}
-		}]
+		index : {
+			options : [
+				{ name : 'Red'},
+				{ name : 'Blue'},
+				{ name : 'Yellow'},
+				{ name : 'Green'},
+				{ name : 'Black'},
+				{ name : 'Purple'}
+			]
+		}
 	},
 	
 	{ 
 		title : "Please tell us a bit about yourself.",
 		type : "matrix",
-		answers : [{
-			index : {
-				name : "General Age",
-				values : [
-					{ name : '<18',      type: 'range', end: 18.0 },
-					{ name : '18 to 35', type: 'range', start: 18.0, end: 35.0},
-					{ name : '35 to 55', type: 'range', start: 35.0, end: 55.0 },
-					{ name : '>55',      type: 'range', start: 55.0 }
-				]
-			},
-			columns : [
-				{
-					name : "Gender",
-					values : [
-						{ name : 'Male' },
-						{ name : 'Female' }
-					]
-				}
+		index : {
+			name : "AgeRange",
+			options : [
+				{ name : '<18',      type: 'range', end: 18.0 },
+				{ name : '18 to 35', type: 'range', start: 18.0, end: 35.0},
+				{ name : '35 to 55', type: 'range', start: 35.0, end: 55.0 },
+				{ name : '>55',      type: 'range', start: 55.0 }
 			]
-		}]
+		},
+		column : {
+			name : "Gender",
+			options : [
+				{ name : 'Male' },
+				{ name : 'Female' }
+			]
+		}
 	}
 ]

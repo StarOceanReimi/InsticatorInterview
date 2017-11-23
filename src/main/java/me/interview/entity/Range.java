@@ -4,8 +4,10 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("RANGE")
-public class Range extends AttributeValue {
+@DiscriminatorValue(value="RANGE")
+public class Range extends OptionValue {
+
+	private static final long serialVersionUID = -7556582826480903068L;
 
 	private Double start;
 	

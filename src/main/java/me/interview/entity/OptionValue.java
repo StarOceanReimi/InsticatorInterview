@@ -29,8 +29,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="type", discriminatorType=DiscriminatorType.STRING)
-public class AttributeValue implements IDAware<Long> {
+public abstract class OptionValue implements IDAware<Long> {
 	
+	private static final long serialVersionUID = 2274273176519857204L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -38,21 +40,20 @@ public class AttributeValue implements IDAware<Long> {
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="owner_id", nullable = false)
-	private Attribute owner;
+	private OptionGroup owner;
 	
 	private boolean suggested;
 	
 	@Column(nullable = false)
 	private String name;
-
-	public AttributeValue() {
+	
+	public OptionValue() {
 	}
 	
-	public AttributeValue(String name) {
+	public OptionValue(String name) {
 		super();
 		this.name = name;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -62,11 +63,11 @@ public class AttributeValue implements IDAware<Long> {
 		this.id = id;
 	}
 
-	public Attribute getOwner() {
+	public OptionGroup getOwner() {
 		return owner;
 	}
 
-	public void setOwner(Attribute owner) {
+	public void setOwner(OptionGroup owner) {
 		this.owner = owner;
 	}
 
