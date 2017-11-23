@@ -18,6 +18,7 @@
 *.tar.gz
 *.rar
 
+jsp/
 target/
 .settings/
 .project

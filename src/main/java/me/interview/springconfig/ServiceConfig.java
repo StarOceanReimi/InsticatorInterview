@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -18,12 +19,15 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @EnableAspectJAutoProxy
 public class ServiceConfig {
 
+	@JsonFilter("nameExcludeFilter")
+	public static class DynamicPropertyFilterMixin {}
+	
 	@Bean
 	ObjectMapper serviceObjectMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		JavaTimeModule module = new JavaTimeModule();
-		
 		mapper.registerModule(module);
+		mapper.addMixIn(Object.class, DynamicPropertyFilterMixin.class);
 		mapper.configure(Feature.ALLOW_COMMENTS, true)
 			  .configure(Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
 			  .configure(Feature.ALLOW_SINGLE_QUOTES, true)

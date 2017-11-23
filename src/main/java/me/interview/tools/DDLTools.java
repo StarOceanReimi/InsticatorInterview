@@ -30,7 +30,8 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
  */
 public class DDLTools {
 
-    public static Set<Class<?>> scanClassesByAnnotations(String packageName, Class<? extends Annotation>... annoFilters) {
+    @SafeVarargs
+	public static Set<Class<?>> scanClassesByAnnotations(String packageName, Class<? extends Annotation>... annoFilters) {
         ClassPathScanningCandidateComponentProvider provider =
                 new ClassPathScanningCandidateComponentProvider(false);
         Arrays.stream(annoFilters)
@@ -49,7 +50,8 @@ public class DDLTools {
                         .collect(toSet());
     }
 
-    public static void main(String[] args) throws IOException {
+    @SuppressWarnings("unchecked")
+	public static void main(String[] args) throws IOException {
         Properties hbnProp = new Properties();
         ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
         InputStream configInput = contextLoader.getResourceAsStream("META-INF/hibernate.properties");

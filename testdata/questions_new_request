@@ -1,7 +1,7 @@
 [
 	//these are for brand new question insert into db
 	{
-		title : "hich team won the 2017 super bowl?",
+		title : "Which team won the 2017 super bowl?",
 		type : 'trivia',
 		index : {
 			options : [

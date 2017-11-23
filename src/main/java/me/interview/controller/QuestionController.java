@@ -26,16 +26,10 @@ import me.interview.repository.QuestionRepo;
 public class QuestionController {
 
 	@RequestMapping("/")
-    @ResponseBody
-    String home() {
-        return "Hello";
-    }
-	
-	@RequestMapping("/manager")
 	ModelAndView questionManager() {
+		Iterable<Question> questions = qRepo.findAllJoin();
 		Map<String, Object> model = new HashMap<>();
-		model.put("name", "Q");
-		model.put("lists", Arrays.<String>asList("A", "B", "C", "D", "E"));
+		model.put("questions", questions);
 		return new ModelAndView("questionManager", model);
 	}
 	
