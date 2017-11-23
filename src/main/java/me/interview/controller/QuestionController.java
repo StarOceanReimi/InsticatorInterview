@@ -35,7 +35,7 @@ public class QuestionController {
 	ModelAndView questionManager() {
 		Map<String, Object> model = new HashMap<>();
 		model.put("name", "Q");
-		model.put("lists", Arrays.<String>asList("A", "B", "C", "D", "E"));
+		model.put("lists", Arrays.<String>asList("A", "B", "C", "D", "F"));
 		return new ModelAndView("questionManager", model);
 	}
 	
