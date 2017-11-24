@@ -16,7 +16,6 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages={"me.interview.controller"})
 public class MVCConfig implements WebMvcConfigurer {
 
-	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		ResourceHandlerRegistration hander = registry.addResourceHandler("/js/**", "/css/**", "/images/**", "/static/**");
@@ -33,5 +32,4 @@ public class MVCConfig implements WebMvcConfigurer {
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }    
-    
 }

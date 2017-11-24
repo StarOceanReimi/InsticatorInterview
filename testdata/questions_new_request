@@ -71,5 +71,30 @@
 				{ name : 'Female' }
 			]
 		}
+	},
+	
+	{ 
+		title : "Describe your favorite brand of gaming equipment.",
+		tags : [ { name : 'Gaming Equipment'}, { name : 'Keyboard' } , { name : 'Mouse' }],
+		type : "matrix",
+		index : {
+			name : "Gaming Equipment",
+			options : [
+				{ name : 'Mouse' },
+				{ name : 'MousePad' },
+				{ name : 'Keyboard'},
+				{ name : 'Headphone' }
+			]
+		},
+		column : {
+			name : "Gaming Equipment Brand",
+			options : [
+				{ name : 'Steel Series' },
+				{ name : 'Logitech' },
+				{ name : 'Razer' },
+				{ name : 'Corsair' },
+				{ name : 'Roccat' }
+			]
+		}
 	}
 ]

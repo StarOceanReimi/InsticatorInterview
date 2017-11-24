@@ -13,6 +13,7 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -35,6 +36,10 @@ public class App  {
 		contextHandler.addServlet(new ServletHolder(servlet), "/");
 		FilterHolder encodingFilter = new FilterHolder(new CharacterEncodingFilter("UTF8"));
 		contextHandler.addFilter(encodingFilter, "/*", EnumSet.of(REQUEST, FORWARD));
+		OpenEntityManagerInViewFilter filter = new OpenEntityManagerInViewFilter();
+		filter.setEntityManagerFactoryBeanName("entityManagerFactory");
+		FilterHolder openEntityInViewFilter = new FilterHolder(filter);
+		contextHandler.addFilter(openEntityInViewFilter, "/*", EnumSet.of(REQUEST, FORWARD));
 		server.setHandler(contextHandler);
 //		new Thread(new ServerRestarter(server, currentClassLoader)).start();
 		return server;

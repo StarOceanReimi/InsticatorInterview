@@ -21,8 +21,8 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.3.0.v20150612</version>
 				<configuration>
-					<reload>automatic</reload>
-					<scanIntervalSeconds>1</scanIntervalSeconds>
+					<reload>manual</reload>
+					<!-- <scanIntervalSeconds>1</scanIntervalSeconds> -->
 					<webAppSourceDirectory>${webroot}</webAppSourceDirectory>
 					<webApp>
 						<contextPath>/</contextPath>
@@ -159,6 +159,14 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjtools -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjtools</artifactId>
+			<version>1.8.9</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>

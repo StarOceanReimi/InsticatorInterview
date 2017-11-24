@@ -7,6 +7,6 @@ import me.interview.entity.Question;
 
 public interface QuestionRepo extends CrudRepository<Question, Long> {
 
-	@Query("select q from Question q join fetch q.index qi left join fetch q.column qc left join fetch q.tags qt")
+	@Query("select q from Question q join fetch q.index qi left join fetch q.column qc")
 	Iterable<Question> findAllJoin();
 }

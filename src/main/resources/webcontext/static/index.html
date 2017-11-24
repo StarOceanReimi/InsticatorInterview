@@ -1,10 +1,298 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Question Simple Manager</title>
+<script type="text/javascript">
+	function doThis(el) {
+		var $el = $(el);
+		var $qb = $el.parent().parent();
+		var ds = $qb[0].dataset;
+		var cmd = $el.text();
+		switch(cmd) {
+		case 'EDIT':
+			
+			break;
+		case 'DELETE':
+			break;
+		case 'SUBMIT':
+			
+			
+			break;
+		}
+		console.log(cmd, ds.questionId, ds.questionType);
+	}
+</script>
 </head>
 <body>
-	HELLO
+	<h1>Question Manager</h1>
+	<hr />
+	<div id="main">
+		<div>
+			<button>Add New Question</button>
+		</div>
+		<div>
+			<label for="searchInput">Tags Or Title For Search: </label> <input
+				id="searchInput" name="search" />
+			<button>Search</button>
+		</div>
+
+
+
+		<div class="question-block" data-question-id="1"
+			data-question-type="TRIVIA">
+			<div class="command-pane">
+				<button onclick="doThis(this)">Edit</button>
+				<button onclick="doThis(this)">Delete</button>
+				<button onclick="doThis(this)">Submit</button>
+			</div>
+			<div class="question-block">
+				<div class="question-title">
+					<span>1. </span>Which team won the 2017 super bowl?
+				</div>
+				<div class="option-group">
+					<table>
+						<tr>
+							<td data-option-id="2"><input id="option-2" type="checkbox" />
+								<label for="option-2">Falcons</label></td>
+						</tr>
+						<tr>
+							<td data-option-id="1"><input id="option-1" type="checkbox" />
+								<label for="option-1">Patriots</label></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="question-block" data-question-id="2"
+			data-question-type="POLL">
+			<div class="command-pane">
+				<button onclick="doThis(this)">Edit</button>
+				<button onclick="doThis(this)">Delete</button>
+				<button onclick="doThis(this)">Submit</button>
+			</div>
+			<div class="question-block">
+				<div class="question-title">
+					<span>2. </span>What is your favorite tech company?
+				</div>
+				<div class="option-group">
+					<table>
+
+						<tr>
+							<th>Tech Company</th>
+
+						</tr>
+
+
+						<tr>
+							<td data-option-id="3"><input id="option-3" type="checkbox" />
+								<label for="option-3">BaiDu</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="6"><input id="option-6" type="checkbox" />
+								<label for="option-6">Tencent</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="4"><input id="option-4" type="checkbox" />
+								<label for="option-4">Apple</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="5"><input id="option-5" type="checkbox" />
+								<label for="option-5">Google</label></td>
+
+						</tr>
+
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="question-block" data-question-id="3"
+			data-question-type="POLL">
+			<div class="command-pane">
+				<button onclick="doThis(this)">Edit</button>
+				<button onclick="doThis(this)">Delete</button>
+				<button onclick="doThis(this)">Submit</button>
+			</div>
+			<div class="question-block">
+				<div class="question-title">
+					<span>3. </span>What's your favorite car brand?
+				</div>
+				<div class="option-group">
+					<table>
+
+
+						<tr>
+							<td data-option-id="7"><input id="option-7" type="checkbox" />
+								<label for="option-7">Nissan</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="8"><input id="option-8" type="checkbox" />
+								<label for="option-8">Honda</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="10"><input id="option-10"
+								type="checkbox" /> <label for="option-10">Audi</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="9"><input id="option-9" type="checkbox" />
+								<label for="option-9">BMW</label></td>
+
+						</tr>
+
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="question-block" data-question-id="4"
+			data-question-type="CHECKBOX">
+			<div class="command-pane">
+				<button onclick="doThis(this)">Edit</button>
+				<button onclick="doThis(this)">Delete</button>
+				<button onclick="doThis(this)">Submit</button>
+			</div>
+			<div class="question-block">
+				<div class="question-title">
+					<span>4. </span>What are the colors do you like?
+				</div>
+				<div class="option-group">
+					<table>
+
+
+						<tr>
+							<td data-option-id="14"><input id="option-14"
+								type="checkbox" /> <label for="option-14">Purple</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="16"><input id="option-16"
+								type="checkbox" /> <label for="option-16">Yellow</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="11"><input id="option-11"
+								type="checkbox" /> <label for="option-11">Black</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="12"><input id="option-12"
+								type="checkbox" /> <label for="option-12">Red</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="15"><input id="option-15"
+								type="checkbox" /> <label for="option-15">Blue</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="13"><input id="option-13"
+								type="checkbox" /> <label for="option-13">Green</label></td>
+
+						</tr>
+
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="question-block" data-question-id="5"
+			data-question-type="MATRIX">
+			<div class="command-pane">
+				<button onclick="doThis(this)">Edit</button>
+				<button onclick="doThis(this)">Delete</button>
+				<button onclick="doThis(this)">Submit</button>
+			</div>
+			<div class="question-block">
+				<div class="question-title">
+					<span>5. </span>Please tell us a bit about yourself.
+				</div>
+				<div class="option-group">
+					<table>
+
+						<tr>
+							<th>AgeRange</th>
+
+							<th>Gender</th>
+
+						</tr>
+
+
+						<tr>
+							<td data-option-id="22">18 to 35</td>
+
+							<td data-option-id=""><input id="option-22-17"
+								type="checkbox" /> <label for="option-22-17">Female</label></td>
+
+							<td data-option-id=""><input id="option-22-18"
+								type="checkbox" /> <label for="option-22-18">Male</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="19"><18</td>
+
+							<td data-option-id=""><input id="option-19-17"
+								type="checkbox" /> <label for="option-19-17">Female</label></td>
+
+							<td data-option-id=""><input id="option-19-18"
+								type="checkbox" /> <label for="option-19-18">Male</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="21">35 to 55</td>
+
+							<td data-option-id=""><input id="option-21-17"
+								type="checkbox" /> <label for="option-21-17">Female</label></td>
+
+							<td data-option-id=""><input id="option-21-18"
+								type="checkbox" /> <label for="option-21-18">Male</label></td>
+
+						</tr>
+
+						<tr>
+							<td data-option-id="20">>55</td>
+
+							<td data-option-id=""><input id="option-20-17"
+								type="checkbox" /> <label for="option-20-17">Female</label></td>
+
+							<td data-option-id=""><input id="option-20-18"
+								type="checkbox" /> <label for="option-20-18">Male</label></td>
+
+
+						</tr>
+
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+		integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+		crossorigin="anonymous"></script>
+
 </body>
 </html>

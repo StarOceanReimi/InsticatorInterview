@@ -11,6 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import me.interview.repository.QuestionService;
+import me.interview.repository.QuestionServiceImpl;
+
 /**
  * Created by reimi on 11/19/17.
  */
@@ -27,11 +30,15 @@ public class ServiceConfig {
 		ObjectMapper mapper = new ObjectMapper();
 		JavaTimeModule module = new JavaTimeModule();
 		mapper.registerModule(module);
-		mapper.addMixIn(Object.class, DynamicPropertyFilterMixin.class);
 		mapper.configure(Feature.ALLOW_COMMENTS, true)
 			  .configure(Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
 			  .configure(Feature.ALLOW_SINGLE_QUOTES, true)
 			  .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		return mapper;
+	}
+	
+	@Bean
+	QuestionService questionService() {
+		return new QuestionServiceImpl();
 	}
 }

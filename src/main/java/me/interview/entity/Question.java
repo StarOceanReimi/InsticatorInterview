@@ -17,6 +17,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.BatchSize;
+
 @Entity
 public class Question implements IDAware<Long> {
 
@@ -41,12 +43,13 @@ public class Question implements IDAware<Long> {
 	@JoinColumn(name="column_id")
 	private OptionGroup column;
 	
-	@ManyToMany(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST})
+	@ManyToMany(fetch=FetchType.EAGER, cascade={CascadeType.PERSIST})
 	@JoinTable(
 		name="questiontags",
 		joinColumns=@JoinColumn(name="question_id", nullable=false, referencedColumnName="id"),
 		inverseJoinColumns=@JoinColumn(name="tag_id", nullable=false, referencedColumnName="id")
 	)
+	@BatchSize(size=10)
 	private Set<Tag> tags;
 	
 	@Column
