@@ -9,6 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.BatchSize;
 
@@ -19,14 +23,17 @@ public class OptionGroup implements IDAware<Long> {
 
 	private static final long serialVersionUID = -7448814545577623152L;
 
+	@Min(1)
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	private String name;
 	
+	@NotNull
+	@Size(min=1)
 	@JsonManagedReference
-	@OneToMany(mappedBy="owner", cascade={CascadeType.PERSIST}, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="owner", cascade={ CascadeType.ALL }, fetch=FetchType.EAGER)
 	@BatchSize(size=10)
 	private Set<OptionValue> options;
 
@@ -46,7 +53,7 @@ public class OptionGroup implements IDAware<Long> {
 		this.name = name;
 	}
 
-	public Set<OptionValue> getOptions() {
+	public Set<@Valid OptionValue> getOptions() {
 		return options;
 	}
 

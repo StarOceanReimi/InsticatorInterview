@@ -5,12 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 
+import me.interview.validator.TagValidator;
+
+@TagValidator
 @Entity
 public class Tag implements IDAware<Long>, UniqueNameAware {
 	
 	private static final long serialVersionUID = -3266210645005598171L;
 
+	@Min(1)
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;

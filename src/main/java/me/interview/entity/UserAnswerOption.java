@@ -7,6 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import me.interview.validator.UserAnswerOptionValidator;
+
+@UserAnswerOptionValidator
 @Entity
 public class UserAnswerOption implements IDAware<Long> {
 

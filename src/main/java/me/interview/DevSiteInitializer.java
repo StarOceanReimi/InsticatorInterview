@@ -1,6 +1,5 @@
 package me.interview;
 
-import java.lang.reflect.Field;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -18,22 +17,9 @@ public class DevSiteInitializer implements WebApplicationInitializer {
 
 	static Logger logger = LoggerFactory.getLogger(DevSiteInitializer.class);
 	
-	@SuppressWarnings("rawtypes")
-	private static void ignoreJstlSystemUri() {
-		try {
-			ClassLoader loader = Thread.currentThread().getContextClassLoader();
-			Class<?> tldScannerClass = loader.loadClass("org.apache.jasper.runtime.TldScanner");
-		    Field f = tldScannerClass.getDeclaredField("systemUris");
-		    f.setAccessible(true);
-		    ((Set)f.get(null)).clear();
-		} catch (Exception e) {
-		    throw new RuntimeException("Could not clear TLD system uris.",e);
-		}
-	}
-	
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		ignoreJstlSystemUri();
+		
 		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 		context.setConfigLocations("me.interview.springconfig");
 		ContextLoaderListener listener = new ContextLoaderListener(context);

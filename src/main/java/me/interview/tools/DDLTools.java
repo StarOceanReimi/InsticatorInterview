@@ -50,8 +50,7 @@ public class DDLTools {
                         .collect(toSet());
     }
 
-    @SuppressWarnings("unchecked")
-	public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         Properties hbnProp = new Properties();
         ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
         InputStream configInput = contextLoader.getResourceAsStream("META-INF/hibernate.properties");

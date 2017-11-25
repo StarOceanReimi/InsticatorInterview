@@ -1,6 +1,33 @@
 [
 	//data could be either in database or not in database
 	{
-		
+		//this for change option value, and add tags
+		id : 1,
+		title : "Which team won the XXXX years super bowl?",
+		type : 'trivia',
+		tags : [ { name : 'Hi' } ],
+		index : {
+			id : 1,
+			options : [
+				{ id : 1, name : 'Falcons' , suggested: true },
+				{ id : 2, name : 'Patriots' }
+			]
+		}
+	},
+	{
+		//this for delete option value, and add tags
+		id : 4,
+		title : 'What are the colors do you like?',
+		type : 'checkbox',
+		tags: [ { name : 'favorites' }, { name : 'color'} ],
+		index : {
+			id : 4,
+			name : 'color',
+			options : [
+				{ id : 14, name : 'Pink' },
+				{ id : 15, name : 'Blue' },
+				{ name : 'LightGrey' }
+			]
+		}
 	}
 ]

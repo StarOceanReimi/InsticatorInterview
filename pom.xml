@@ -28,6 +28,7 @@
 						<contextPath>/</contextPath>
 					</webApp>
 				</configuration>
+				
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -127,7 +128,12 @@
 			<version>5.2.9.Final</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator-cdi</artifactId>
+			<version>6.0.5.Final</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -167,13 +173,6 @@
 			<version>1.8.9</version>
 		</dependency>
 
-
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-webapp</artifactId>
-			<version>9.4.3.v20170317</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
@@ -190,11 +189,9 @@
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-jsp</artifactId>
 			<version>9.3.0.M1</version>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
-
-
-
 
 </project>

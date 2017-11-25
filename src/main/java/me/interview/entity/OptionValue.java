@@ -11,6 +11,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -33,6 +35,7 @@ public abstract class OptionValue implements IDAware<Long> {
 	
 	private static final long serialVersionUID = 2274273176519857204L;
 
+	@Min(1)
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -44,6 +47,7 @@ public abstract class OptionValue implements IDAware<Long> {
 	
 	private boolean suggested;
 	
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 	

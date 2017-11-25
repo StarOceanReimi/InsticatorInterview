@@ -9,4 +9,7 @@ public interface QuestionRepo extends CrudRepository<Question, Long> {
 
 	@Query("select q from Question q join fetch q.index qi left join fetch q.column qc")
 	Iterable<Question> findAllJoin();
+	
+	@Query("select q from Question q join fetch q.index qi left join fetch q.column qc where q.id = ?1")
+	Question findJoin(Long id);
 }

@@ -1,5 +1,7 @@
 package me.interview.repository;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import me.interview.entity.Question;
@@ -24,6 +27,7 @@ public class QuestionServiceImpl implements QuestionService {
 	
 	@Transactional
 	@Override
+	@SuppressWarnings({"rawtypes"})
 	public void deleteQuestion(Question question) throws Exception {
 		Optional<Question> syncQuestion = qRepo.findById(question.getId());
 		if(syncQuestion.isPresent()) {
@@ -36,6 +40,17 @@ public class QuestionServiceImpl implements QuestionService {
 		 	}
 			uaRepo.deleteUserAnswerByQuestionId(question.getId());
 			qRepo.delete(question);
+		}
+	}
+
+	@Transactional
+	@Override
+	public void updateQuestion(Question question) throws Exception {
+		Optional<Question> syncQuestion = qRepo.findById(question.getId());
+		if(syncQuestion.isPresent()) {
+			Question dbQuestion = syncQuestion.get();
+			BeanUtils.copyProperties(question, dbQuestion);
+			qRepo.save(dbQuestion);
 		}
 	}
 

@@ -16,6 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.BatchSize;
 
@@ -24,33 +28,41 @@ public class Question implements IDAware<Long> {
 
 	private static final long serialVersionUID = 6693600677353178383L;
 
+	@Min(1)
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotNull
 	@Column
 	private String title;
 	
+	@NotNull
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable=false)
 	private QuestionType type;
 
-	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST})
+	@NotNull
+	@Valid
+	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="index_id", nullable=false)
 	private OptionGroup index;
 	
-	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST})
+	@Valid
+	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="column_id")
 	private OptionGroup column;
 	
-	@ManyToMany(fetch=FetchType.EAGER, cascade={CascadeType.PERSIST})
+
+	@Size(min=1)
+	@ManyToMany(fetch=FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 		name="questiontags",
 		joinColumns=@JoinColumn(name="question_id", nullable=false, referencedColumnName="id"),
 		inverseJoinColumns=@JoinColumn(name="tag_id", nullable=false, referencedColumnName="id")
 	)
 	@BatchSize(size=10)
-	private Set<Tag> tags;
+	private Set<@Valid Tag> tags;
 	
 	@Column
 	private LocalDateTime createTime;

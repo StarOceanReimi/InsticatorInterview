@@ -1,5 +1,9 @@
 package me.interview.springconfig;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +39,12 @@ public class ServiceConfig {
 			  .configure(Feature.ALLOW_SINGLE_QUOTES, true)
 			  .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		return mapper;
+	}
+	
+	@Bean
+	Validator validator() {
+		ValidatorFactory factory =  Validation.buildDefaultValidatorFactory();
+		return factory.getValidator();
 	}
 	
 	@Bean

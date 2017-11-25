@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,14 +14,14 @@
 	<h1>Question Manager</h1>
 	<hr/>
 	<div id="main">
-		<div><button>Add New Question</button></div>
+		<div><button onclick="goDetail(0)">Add New Question</button></div>
 		<div><label for="searchInput">Tags Or Title For Search: </label> <input id="searchInput" name="search" /><button>Search</button></div>
 		<c:set var="qcount" value="0" scope="page"></c:set>
 		<c:forEach items="${questions}" var="q">
 			<c:set var="qcount" value="${ qcount + 1 }" scope="page"></c:set>
 			<div class="question-block-wrapper" data-question-id="${ q.id }" data-question-type="${ q.type }">
 				<div class="command-pane">
-					<button onclick="doThis(this)">Edit</button>
+					<button onclick="goDetail(${ q.id })">Edit</button>
 					<button onclick="doThis(this)">Delete</button>
 					<button onclick="doThis(this)">Submit</button>
 				</div>

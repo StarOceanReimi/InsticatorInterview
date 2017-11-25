@@ -21,7 +21,7 @@ public class MVCConfig implements WebMvcConfigurer {
 		ResourceHandlerRegistration hander = registry.addResourceHandler("/js/**", "/css/**", "/images/**", "/static/**");
 		hander.addResourceLocations("/public/js/", "/public/css/", "/public/images/", "/static/");
 		hander.resourceChain(true);
-		hander.setCachePeriod(31536000);
+		hander.setCachePeriod(0);
 	}
 	
     @Bean
