@@ -1,9 +1,13 @@
 package me.interview.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,10 +15,15 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -50,6 +59,16 @@ public abstract class OptionValue implements IDAware<Long> {
 	@NotBlank
 	@Column(nullable = false)
 	private String name;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="index", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	@OnDelete(action=OnDeleteAction.CASCADE)
+	private Set<UserAnswerOption> answerOptionIndexRefs;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="column", cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	@OnDelete(action=OnDeleteAction.CASCADE)
+	private Set<UserAnswerOption> answerOptionColumnRefs;
 	
 	public OptionValue() {
 	}
@@ -90,4 +109,26 @@ public abstract class OptionValue implements IDAware<Long> {
 	public void setSuggested(boolean suggested) {
 		this.suggested = suggested;
 	}
+
+	public Set<UserAnswerOption> getAnswerOptionIndexRefs() {
+		return answerOptionIndexRefs;
+	}
+
+	public void setAnswerOptionIndexRefs(Set<UserAnswerOption> answerOptionIndexRefs) {
+		this.answerOptionIndexRefs = answerOptionIndexRefs;
+	}
+
+	public Set<UserAnswerOption> getAnswerOptionColumnRefs() {
+		return answerOptionColumnRefs;
+	}
+
+	public void setAnswerOptionColumnRefs(Set<UserAnswerOption> answerOptionColumnRefs) {
+		this.answerOptionColumnRefs = answerOptionColumnRefs;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
 }

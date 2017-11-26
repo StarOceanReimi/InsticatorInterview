@@ -10,5 +10,6 @@ public interface UserAnswerRepo extends CrudRepository<UserAnswer, Long> {
 
 	@Modifying
 	@Query("delete from UserAnswer ua where ua.question.id = ?1")
-	void deleteUserAnswerByQuestionId(Long id);
+	void deleteByQuestionId(Long id);
+	
 }

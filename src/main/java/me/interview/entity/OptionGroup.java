@@ -1,8 +1,9 @@
 package me.interview.entity;
 
+import static javax.persistence.CascadeType.ALL;
+
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.BatchSize;
@@ -30,10 +30,9 @@ public class OptionGroup implements IDAware<Long> {
 	
 	private String name;
 	
-	@NotNull
 	@Size(min=1)
 	@JsonManagedReference
-	@OneToMany(mappedBy="owner", cascade={ CascadeType.ALL }, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="owner", cascade={ ALL }, fetch=FetchType.EAGER)
 	@BatchSize(size=10)
 	private Set<OptionValue> options;
 

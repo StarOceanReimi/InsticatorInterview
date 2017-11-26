@@ -18,7 +18,12 @@
 		<div class="command-pane">
 			<button onclick="submitChange(event)">Submit</button>
 		</div>
-		<div class="question-title"><label>Question Title: </label><input name="title"  value="${ empty q.title ? '' : q.title }"/></div>
+		<div class="question-title">
+			<label>Question Title: </label>
+			<input name="title"  
+				   value="${ empty q.title ? '' : q.title }"
+				   data-question-id="${ q.id }"/>
+		</div>
 		<div class="question-type">
 			<label>Question Type: </label>
 			<select name="type">
@@ -46,60 +51,43 @@
 				<button onclick="addOptionGroup('index', event)">ADD INDEX</button>
 				<button onclick="addOptionGroup('column', event)">ADD COLUMN</button>
 			</div>
+			<jsp:useBean id="groups" class="java.util.LinkedHashMap" scope="page"></jsp:useBean>
 			<c:if test="${ not empty q.index }">
-				<div class="group index">
+				<c:set target="${groups}" property="index" value="${ q.index }"></c:set>
+				<c:if test="${ not empty q.column }">
+					<c:set target="${ groups }" property="column" value="${ q.column }"></c:set>
+				</c:if>
+			</c:if>
+			<c:forEach var="group" items="${ groups.entrySet() }">
+				<div class="group ${ group.key }">
 					<div class="group-name">
-						<label>Index Name</label>
-						<input data-index-id="${ q.index.id }" name="index.name" value="${ empty q.index.name ? '' : q.index.name }">
+						<label>
+							<c:out value="${ fn:toUpperCase(fn:substring(group.key, 0, 1)) }" />
+							<c:out value="${ fn:substring(group.key, 1, fn:length(group.key)) }" />&nbsp;
+						Name: </label>
+						<input data-${ group.key }-id="${ group.value.id }" name="${ group.key }.name" value="${ empty group.value.name ? '' : group.value.name }">
 						<button onclick="removeGroup(event)">REMOVE</button>
 					</div>
-					<div class="option-values">
-						<c:set var="iCnt" value="${ empty q.index ? 0 : q.index.options.size() }" scope="page"></c:set>
-						<c:set var="iIter" value="${ empty q.index ? null : q.index.options.iterator() }" scope="page"></c:set>
-						<c:forEach begin="0" end="${ iCnt }" varStatus="vs">
-							<c:if test="${ not empty iIter and iIter.hasNext() }">
+					<div class="option-values" data-parent-id="${ group.value.id }">
+						<c:set var="cnt" value="${ empty group.value ? 0 : group.value.options.size() }" scope="page"></c:set>
+						<c:set var="iter" value="${ empty group.value ? null : group.value.options.iterator() }" scope="page"></c:set>
+						<c:forEach begin="0" end="${ cnt }" varStatus="vs">
+							<c:if test="${ not empty iter and iter.hasNext() }">
 								<div class="option-value">
-									<c:set var="idx" value="${ iIter.next() }" scope="page"></c:set>
-									<label for="checkbox-index-${ vs.count }">Right Answer</label>
-									<input id="checkbox-index-${ vs.count }" type="checkbox" 
+									<c:set var="idx" value="${ iter.next() }" scope="page"></c:set>
+									<label for="checkbox-${ group.key }-${ vs.count }">Right Answer</label>
+									<input id="checkbox-${ group.key }-${ vs.count }" type="checkbox" 
 										   data-optoin-id="${ idx.id  }" 
-										   name="index.options[${ vs.index }].suggested"
+										   name="${ group.key }.options[${ vs.index }].suggested"
 										   ${ idx.suggested ? "checked value='true'" : "value='false'" } >
-									<input name="index.options[${ vs.index }].name" data-optoin-id="${ idx.id  }" value="${ idx.name }">
+									<input name="${ group.key }.options[${ vs.index }].name" data-option-id="${ idx.id  }" value="${ idx.name }">
 									<button onclick="removeOptionValue(event)">REMOVE</button>
 								</div>				
 							</c:if>
 						</c:forEach>
 					</div>
 				</div>
-			</c:if>
-			<c:if test="${ not empty q.column }">
-				<div class="group column">
-					<div class="group-name">
-						<label>Column Name</label>
-						<input data-column-id="${ q.column.id }" name="column.name" value="${ empty q.column.name ? '' : q.column.name }">
-						<button onclick="removeGroup(event)">REMOVE</button>
-					</div>
-					<div class="option-values">
-						<c:set var="cCnt" value="${ empty q.column ? 0 : q.column.options.size() }" scope="page"></c:set>
-						<c:set var="cIter" value="${ empty q.column ? null : q.column.options.iterator() }" scope="page"></c:set>
-						<c:forEach begin="0" end="${ cCnt }" varStatus="vs">
-							<c:if test="${ not empty cIter and cIter.hasNext() }">
-								<div class="option-value">
-									<c:set var="idx" value="${ cIter.next() }" scope="page"></c:set>
-									<label for="checkbox-column-${ vs.count }">Right Answer</label>
-									<input id="checkbox-column-${ vs.count }" type="checkbox" 
-										   data-optoin-id="${ idx.id  }" 
-										   name="column.options[${ vs.index }].suggested"
-										   ${ idx.suggested ? "checked value='true'" : "value='false'" }>
-									<input name="column.options[${ vs.index }].name" data-optoin-id="${ idx.id  }" value="${ idx.name }">
-									<button onclick="removeOptionValue(event)">REMOVE</button>
-								</div>				
-							</c:if>
-						</c:forEach>
-					</div>
-				</div>
-			</c:if>
+			</c:forEach>
 		</div>
 	</div>
 

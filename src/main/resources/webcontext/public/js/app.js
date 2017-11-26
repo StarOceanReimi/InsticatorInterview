@@ -1,5 +1,10 @@
+function checkboxChangeHandler(e) {
+	const checkbox = e.target;
+	checkbox.value = checkbox.checked;
+}
+
 function removeArrayNullElement(ary) {
-	return ary.filter((elm)=>elm != undefined && elm!=null);
+	return ary.filter((elm)=> !$.isEmptyObject(elm));
 }
 
 function submitChange() {
@@ -9,11 +14,27 @@ function submitChange() {
 	});
 	if(questionObj.tags) 
 		questionObj.tags = removeArrayNullElement(questionObj.tags);
-	if(questionObj.index.options)
+	if(questionObj.index && questionObj.index.options)
 		questionObj.index.options = removeArrayNullElement(questionObj.index.options);
 	if(questionObj.column && questionObj.column.options)
 		questionObj.column.options = removeArrayNullElement(questionObj.column.options);
 	console.log(JSON.stringify(questionObj, null, 4));
+	$.ajax({
+		type : 'POST',
+		url : '/api/questionUpdate',
+		data : JSON.stringify(questionObj),
+		contentType:"application/json; charset=utf-8",
+		dataType:"json",
+		processData:false,
+		statusCode : {
+			400 : function() {
+				alert('bad request error!');
+			},
+			202 : function(resp) {
+				window.location.href = resp.getResponseHeader('Location');
+			}
+		}
+	});
 }
 
 function goDetail(id) {
@@ -52,11 +73,6 @@ function collectDetail(obj, input) {
 	const $input = $(input);
 	const propName = $input.prop('name');
 	let propValue =  $input.val();
-	console.log(propValue);
-	switch(propValue) {
-		case "on":  propValue = true;  break;
-		case "off": propValue = false; break;
-	}
 	const deepObj = setObjectPropValueByFormName(obj, propName, propValue);
 	const dataset = $input.data();
 	const idKey = Object.keys(dataset).filter((key)=>key.endsWith('Id'))[0];
@@ -87,7 +103,9 @@ function addOptionValue(type) {
 	const optionValue = $('<div>').addClass('option-value');
 	const id = `checkbox-${type}-${count+1}`;
 	optionValue.append($('<label>').attr('for', id).text('Right Answer'))
-			   .append($('<input>').attr('id', id).attr('type', 'checkbox').attr('name', `${type}.options[${count}].suggested`))
+			   .append($('<input>').attr('id', id).attr('type', 'checkbox')
+					   			   .attr('name', `${type}.options[${count}].suggested`)
+					   			   .val('false').on('change', checkboxChangeHandler))
 			   .append($('<input>').attr('name', `${type}.options[${count}].name`))
 			   .append($('<button>').text('REMOVE').on('click', removeOptionValue));
 	optionValues.append(optionValue);
@@ -105,7 +123,7 @@ function addOptionGroup(type, e) {
 	const groupName = $('<div>').addClass('group-name');
 	const content = captitalize(type)+" Name";
 	groupName.append($('<label>').text(content))
-			 .append($('<input>').attr('name', 'index.name'))
+			 .append($('<input>').attr('name', `${type}.name`))
 			 .append($('<button>').text("REMOVE").on('click', removeGroup));
 	const optoinValues = $('<div>').addClass('option-values');
 	group.append(groupName).append(optoinValues);
@@ -114,11 +132,64 @@ function addOptionGroup(type, e) {
 }
 
 function removeGroup(e) {
-	$(e.target).parent().parent().remove();
+	const $target = $(e.target);
+	const $group = $target.parent().parent();
+	const dataset =  $target.prev().data();
+	const keys = Object.keys(dataset);
+	if(keys.filter((key)=>key.toLowerCase().indexOf("index")!==-1)[0]) {
+		alert('cant remove existing index of question');
+		return;
+	}
+	if(!dataset) {
+		$group.remove();
+		return;
+	}
+	const gid = dataset[keys.filter((key)=>key.endsWith('Id'))[0]];
+	const qid = $('input[data-question-id]').data('questionId');
+	if(!gid || !qid) {
+		$group.remove();
+		return;
+	}
+	$.ajax({
+		url : '/api/removeOptionGroup',
+		type : 'DELETE',
+		data : $.param({ "qid" : qid, "gid" : gid }),
+		contentType : 'application/x-www-form-urlencoded',
+		statusCode : {
+			400 : function(resp) {
+				alert("bad request error!");
+			},
+			202 : function() {
+				$group.remove();
+			}
+		}
+	});
+		
 }
 
 function removeOptionValue(e) {
-	$(e.target).parent().remove();
+	const $target = $(e.target);
+	const opid = $target.parent().find('[data-option-id]').data('optionId');
+	const gid = $target.parent().parent().data('parentId'); 
+	if(!opid || !gid) {
+		$(e.target).parent().remove();
+		return;
+	}
+	$.ajax({
+		url : '/api/removeOptionValue',
+		type : 'DELETE',
+		data : $.param({ "opid" : opid, "gid" : gid }),
+		contentType : 'application/x-www-form-urlencoded',
+		statusCode : {
+			400 : function(resp) {
+				alert("bad request error!");
+			},
+			202 : function() {
+				$(e.target).parent().remove();
+			}
+		}
+	});
+	
 }
 
 function doThis(el) {
@@ -126,7 +197,7 @@ function doThis(el) {
 	const $qb = $el.parent().parent();
 	const ds = $qb[0].dataset;
 	const cmd = $el.text();
-	const dataObj = {};
+	let dataObj = {};
 	switch(cmd) {
 	case 'Submit':
 		dataObj.question = { 'id' : ds.questionId };
@@ -144,12 +215,11 @@ function doThis(el) {
 			});
 		}
 		answers.forEach((ans)=>dataObj.answers.push(ans));
-		const data = JSON.stringify(dataObj);
-		console.log(data);
+//		console.log(data);
 		$.ajax({
 			url: '/api/userAnswer',
 			type : 'POST',
-			data : data,
+			data : JSON.stringify(dataObj),
 			contentType:"application/json; charset=utf-8",
 			dataType:"json",
 			processData:false,
@@ -157,7 +227,8 @@ function doThis(el) {
 				400 : function() {
 					alert('bad request error!');
 				},
-				202 : function() {
+				202 : function(resp) {
+					console.log(resp);
 					alert('cool, ur answer has submitted sucessfully!');
 				}
 			}
@@ -165,11 +236,10 @@ function doThis(el) {
 		break;
 	case 'Delete':
 		dataObj = { 'id' : ds.questionId };
-		const data = JSON.stringify(dataObj);
 		$.ajax({
 			url: '/api/deleteQuestion',
 			type : 'DELETE',
-			data : data,
+			data : JSON.stringify(dataObj),
 			contentType:"application/json; charset=utf-8",
 			dataType:"json",
 			processData:false,
@@ -186,9 +256,6 @@ function doThis(el) {
 	}
 }
 $(document).ready(function(){
-	$('[type="checkbox"]').on('change', function(e){
-		const checkbox = e.target;
-		checkbox.value = checkbox.checked;
-	});	
+	$('[type="checkbox"]').on('change', checkboxChangeHandler);	
 });
 

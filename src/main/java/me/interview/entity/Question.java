@@ -19,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.BatchSize;
 
@@ -44,18 +43,16 @@ public class Question implements IDAware<Long> {
 
 	@NotNull
 	@Valid
-	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name="index_id", nullable=false)
 	private OptionGroup index;
 	
 	@Valid
-	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name="column_id")
 	private OptionGroup column;
 	
-
-	@Size(min=1)
-	@ManyToMany(fetch=FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToMany(fetch=FetchType.EAGER, cascade={CascadeType.ALL})
 	@JoinTable(
 		name="questiontags",
 		joinColumns=@JoinColumn(name="question_id", nullable=false, referencedColumnName="id"),
