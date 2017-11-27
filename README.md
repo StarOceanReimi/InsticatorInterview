@@ -32,7 +32,7 @@ Used following frameworks
 
 ### 3. Restful-Service API
 
-POST /api/questionUpdate Accept Content Type (application/json)
+**POST** `/api/questionUpdate` Accept Content Type `application/json`
 
 This api combined both insert and update operations
 
@@ -98,7 +98,7 @@ Response Code:
 * 400 Bad Request for reject
 * 202 Accepted    for accept
 
-DELETE /api/deleteQuestion Accept Content Type (application/www-form-urlencoded)
+**DELETE** `/api/deleteQuestion` Accept Content Type `application/www-form-urlencoded`
 
 	{
 		id : [Integer], //for question id
@@ -110,7 +110,7 @@ Response Code:
 * 202 Accepted    for accept With Header **Location** to guide client redirect page
 
 
-DELETE /api/removeOptionGroup Accept Content Type (application/www-form-urlencoded)
+**DELETE** `/api/removeOptionGroup` Accept Content Type `application/www-form-urlencoded`
 	
 	{
 		"qid" : [Integer], // for question id
@@ -122,7 +122,7 @@ Response Code:
 * 400 Bad Request for reject
 * 202 Accepted    for accept
 
-DELETE /api/removeOptionValue Accept Content Type(application/www-form-urlencoded)
+**DELETE** `/api/removeOptionValue` Accept Content Type `application/www-form-urlencoded`
 	
 	{
 		"gid" : [Integer]  // for option group id,
@@ -135,7 +135,7 @@ Response Code:
 * 202 Accepted    for accept
 
 
-POST /api/userAnswer Accept Content Type (application/json)
+**POST** `/api/userAnswer` Accept Content Type `application/json`
 
 	{//example for user answer a matrix question
 		question : { id : 5 },
