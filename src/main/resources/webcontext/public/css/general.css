@@ -1,0 +1,15 @@
+.no-radius {
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+}
+label {
+	user-select: none;
+}
+.command-pane, .command-pane-inner {
+	margin-bottom: 8px;
+}
+
+.group, .question-tag-wrapper, .question-type {
+	margin-bottom: 1em;
+}

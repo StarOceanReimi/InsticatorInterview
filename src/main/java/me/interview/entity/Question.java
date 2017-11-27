@@ -21,7 +21,11 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
+@Indexed
 @Entity
 public class Question implements IDAware<Long> {
 
@@ -32,6 +36,7 @@ public class Question implements IDAware<Long> {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@Field
 	@NotNull
 	@Column
 	private String title;
@@ -41,17 +46,20 @@ public class Question implements IDAware<Long> {
 	@Column(nullable=false)
 	private QuestionType type;
 
+	@IndexedEmbedded
 	@NotNull
 	@Valid
 	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name="index_id", nullable=false)
 	private OptionGroup index;
 	
+	@IndexedEmbedded
 	@Valid
 	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name="column_id")
 	private OptionGroup column;
 	
+	@IndexedEmbedded
 	@ManyToMany(fetch=FetchType.EAGER, cascade={CascadeType.ALL})
 	@JoinTable(
 		name="questiontags",

@@ -25,9 +25,6 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
-/**
- * Created by reimi on 11/18/17.
- */
 public class DDLTools {
 
     @SafeVarargs

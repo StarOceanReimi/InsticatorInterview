@@ -21,6 +21,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.search.annotations.ContainedIn;
+import org.hibernate.search.annotations.Field;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -56,6 +58,7 @@ public abstract class OptionValue implements IDAware<Long> {
 	
 	private boolean suggested;
 	
+	@Field
 	@NotBlank
 	@Column(nullable = false)
 	private String name;

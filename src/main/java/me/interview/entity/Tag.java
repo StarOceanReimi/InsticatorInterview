@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
 
+import org.hibernate.search.annotations.Field;
+
 import me.interview.validator.TagValidator;
 
 @TagValidator
@@ -20,6 +22,7 @@ public class Tag implements IDAware<Long>, UniqueNameAware {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@Field
 	@Column(unique=true, nullable=false)
 	private String name;
 

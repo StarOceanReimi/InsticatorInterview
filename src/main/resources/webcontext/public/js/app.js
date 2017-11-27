@@ -41,6 +41,10 @@ function goDetail(id) {
 	window.location.href = "/detail/"+id;
 }
 
+function goManager() {
+	window.location.href = "/";
+}
+
 function setObjectPropValueByFormName(obj, name, value) {
 	const props = name.split('.');
 	const lastIdx = props.length-1;
@@ -82,15 +86,18 @@ function collectDetail(obj, input) {
 function addTag(e) {
 	const wrapper = $('.question-tag-wrapper');
 	const count = wrapper.children().length;
-	const tagDiv = $('<div>').addClass('tag');
-	const input = $('<input>').attr('name', `tags[${count}].name`);
-	const button = $('<button>').text('REMOVE').on('click', removeTag);
-	tagDiv.append(input).append(button);
+	const tagDiv = $('<div>').addClass('tag input-group col-md-4');
+	const addon  = $('<span>').addClass('input-group-addon').text('TAG');
+	const input = $('<input>').attr('name', `tags[${count}].name`).addClass('form-control input-sm');
+	const btnGroup = $('<div>').addClass('input-group-btn');
+	const button = $('<button>').text('REMOVE').on('click', removeTag).addClass('btn btn-sm btn-primary no-radius');
+	btnGroup.append(button);
+	tagDiv.append(addon).append(input).append(btnGroup);
 	wrapper.append(tagDiv);
 }
 
 function removeTag(e) {
-	$(e.target).parent().remove();
+	$(e.target).parent().parent().remove();
 }
 
 function captitalize(str) {
@@ -100,15 +107,27 @@ function captitalize(str) {
 function addOptionValue(type) {
 	const optionValues = $('.'+type).find('.option-values');
 	const count = optionValues.children().length;
-	const optionValue = $('<div>').addClass('option-value');
+	const optionValue = $('<div>').addClass('option-value col-md-6 input-group');
 	const id = `checkbox-${type}-${count+1}`;
-	optionValue.append($('<label>').attr('for', id).text('Right Answer'))
-			   .append($('<input>').attr('id', id).attr('type', 'checkbox')
-					   			   .attr('name', `${type}.options[${count}].suggested`)
-					   			   .val('false').on('change', checkboxChangeHandler))
-			   .append($('<input>').attr('name', `${type}.options[${count}].name`))
-			   .append($('<button>').text('REMOVE').on('click', removeOptionValue));
+	const addon = $('<span>').addClass('input-group-addon');
+	const checkbox = $('<input>').attr({
+		type : 'checkbox',
+		id : id,
+		name : `${type}.options[${count}].suggested`,
+		'data-toggle' : "tooltip",
+		'data-placement' : "left",
+		'data-original-title' : "is right answer?"
+	}).val('false').on('change', checkboxChangeHandler);
+	addon.append(checkbox);
+	const input = $('<input>').attr('name', `${type}.options[${count}].name`)
+							  .addClass('form-control input-sm');
+	const btnGroup = $('<div>').addClass('input-group-btn');
+	const button = $('<button>').text('REMOVE').on('click', removeOptionValue)
+								.addClass('btn btn-sm btn-primary no-radius');
+	btnGroup.append(button);
+	optionValue.append(addon).append(input).append(btnGroup);
 	optionValues.append(optionValue);
+	$('[data-toggle="tooltip"]').tooltip();
 }
 
 function addOptionGroup(type, e) {
@@ -120,11 +139,18 @@ function addOptionGroup(type, e) {
 	//not exists
 	const optionGroups = $('.option-groups');
 	const group = $('<div>').addClass('group').addClass(type);
-	const groupName = $('<div>').addClass('group-name');
+	const groupName = $('<div>').addClass('group-name input-group col-md-6');
 	const content = captitalize(type)+" Name";
-	groupName.append($('<label>').text(content))
-			 .append($('<input>').attr('name', `${type}.name`))
-			 .append($('<button>').text("REMOVE").on('click', removeGroup));
+	const addon = $('<span>').addClass('input-group-addon').text(content);
+	const input = $('<input>').attr('name', `${type}.name`).addClass('form-control input-sm');
+	const btnGroup = $('<div>').addClass('input-group-btn')
+							   .append($('<button>')
+									   .addClass('btn btn-sm btn-primary no-radius')
+									   .text("REMOVE")
+									   .on('click', removeGroup));
+	groupName.append(addon)
+			 .append(input)
+			 .append(btnGroup);
 	const optoinValues = $('<div>').addClass('option-values');
 	group.append(groupName).append(optoinValues);
 	optionGroups.append(group);
@@ -133,15 +159,15 @@ function addOptionGroup(type, e) {
 
 function removeGroup(e) {
 	const $target = $(e.target);
-	const $group = $target.parent().parent();
-	const dataset =  $target.prev().data();
+	const $group = $target.parent().parent().parent();
+	const dataset =  $target.parent().prev().data();
+	if(!dataset) {
+		$group.remove();
+		return;
+	}
 	const keys = Object.keys(dataset);
 	if(keys.filter((key)=>key.toLowerCase().indexOf("index")!==-1)[0]) {
 		alert('cant remove existing index of question');
-		return;
-	}
-	if(!dataset) {
-		$group.remove();
 		return;
 	}
 	const gid = dataset[keys.filter((key)=>key.endsWith('Id'))[0]];
@@ -169,10 +195,12 @@ function removeGroup(e) {
 
 function removeOptionValue(e) {
 	const $target = $(e.target);
-	const opid = $target.parent().find('[data-option-id]').data('optionId');
-	const gid = $target.parent().parent().data('parentId'); 
+	//option value
+	const optionValueDiv = $target.parent().parent();
+	const opid = optionValueDiv.find('[data-option-id]').data('optionId');
+	const gid = optionValueDiv.parent().data('parentId'); 
 	if(!opid || !gid) {
-		$(e.target).parent().remove();
+		optionValueDiv.remove();
 		return;
 	}
 	$.ajax({
@@ -185,11 +213,16 @@ function removeOptionValue(e) {
 				alert("bad request error!");
 			},
 			202 : function() {
-				$(e.target).parent().remove();
+				optionValueDiv.remove();
 			}
 		}
 	});
 	
+}
+
+function doSearch(el) {
+	const term = $('[name="search"]').val();
+	window.location.href = `/?term=${term}`;
 }
 
 function doThis(el) {
@@ -257,5 +290,12 @@ function doThis(el) {
 }
 $(document).ready(function(){
 	$('[type="checkbox"]').on('change', checkboxChangeHandler);	
+	const $tooltip = $('[data-toggle="tooltip"]');
+	if($tooltip.length) {
+		$tooltip.tooltip();
+	}
+	$('[name="search"]').on('keypress', function(e){
+		if(e.keyCode === 13) doSearch(e.target);
+	}).focus();
 });
 

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -34,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.interview.entity.Question;
 import me.interview.entity.UserAnswer;
 import me.interview.repository.OptionValueRepo;
+import me.interview.repository.QuestionLuceneSearchService;
 import me.interview.repository.QuestionRepo;
 import me.interview.repository.QuestionService;
 import me.interview.repository.UserAnswerRepo;
@@ -62,14 +64,30 @@ public class QuestionController {
 	
 	@Autowired
 	private Validator validator;
+	
+	@Autowired
+	private QuestionLuceneSearchService fuzzySearchService;
 
 	
 	@RequestMapping("/")
-	ModelAndView questionManager() {
-		Iterable<Question> questions = qRepo.findAllJoin();
-		Map<String, Object> model = new HashMap<>();
-		model.put("questions", questions);
-		return new ModelAndView("questionManager", model);
+	ModelAndView questionManager(@RequestParam MultiValueMap<String, String> parameters) {
+		ModelAndView mv = new ModelAndView("questionManager");
+		String term = parameters.getFirst("term");
+		Iterable<Question> questions = null;
+		if(term == null || term.length() == 0) {
+			questions = qRepo.findAllJoin();
+		} else {
+			try {
+				questions = fuzzySearchService.fuzzySearch(term, 1);
+			} catch (Exception e) {
+				//backup solution
+				LOGGER.warn("FUZZY SEARCH ERROR: {}", e.getMessage());
+				questions = qRepo.findAllJoin();
+			}
+			
+		}
+		mv.addObject("questions", questions);
+		return mv;
 	}
 	
 	@RequestMapping("/detail/{id}")

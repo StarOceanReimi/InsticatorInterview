@@ -25,9 +25,6 @@ import javax.swing.WindowConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by reimi on 11/19/17.
- */
 public class CipherTools {
 
     private static Logger LOGGER = LoggerFactory.getLogger(CipherTools.class);

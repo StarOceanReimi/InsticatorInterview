@@ -15,6 +15,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -28,8 +30,10 @@ public class OptionGroup implements IDAware<Long> {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@Field
 	private String name;
 	
+	@IndexedEmbedded
 	@Size(min=1)
 	@JsonManagedReference
 	@OneToMany(mappedBy="owner", cascade={ ALL }, fetch=FetchType.EAGER)

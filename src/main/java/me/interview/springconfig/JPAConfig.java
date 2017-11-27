@@ -3,6 +3,7 @@ package me.interview.springconfig;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -80,6 +81,14 @@ public class JPAConfig {
         return dataSource;
     }
 
+    public Properties additionalHibernateProperties() {
+        Properties properties = new Properties();
+        String path = Paths.get(System.getProperty("user.dir"), "lucene_index").toString();
+        properties.setProperty("hibernate.search.default.directory_provider", "filesystem");
+        properties.setProperty("hibernate.search.default.indexBase", path + "/");
+        LOGGER.info("LUCENE BASE PATH: {}", path);
+        return properties;
+    }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Value("project-pu") String unitName, DataSource dataSource) {
@@ -91,6 +100,7 @@ public class JPAConfig {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setShowSql(true);
         factoryBean.setJpaVendorAdapter(vendorAdapter);
+        factoryBean.setJpaProperties(additionalHibernateProperties());
         return factoryBean;
     }
 
