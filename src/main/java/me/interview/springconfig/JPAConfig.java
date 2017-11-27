@@ -52,7 +52,11 @@ public class JPAConfig {
     }
 
     @Bean(destroyMethod = "close")
-    public DataSource c3p0Datasource(@Value("#{systemProperties['dbaccess_pass'] ?: null}") String dbAccessPass) {
+    public DataSource c3p0Datasource(
+    		@Value("#{systemProperties['dbaccess_pass'] ?: null}") 
+    		String dbAccessPass,
+    		@Value("#{systemProperties['dbaccess_protect'] ?: null}")
+    		String dbaccessProtect) {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         Properties prop = loadProperties("META-INF/c3p0.properties");
         Enumeration<Object> enumeration = prop.keys();
@@ -70,14 +74,17 @@ public class JPAConfig {
                 LOGGER.warn("failed to set property {}.", key);
             }
         }
-        String cipher = dataSource.getPassword();
-        char[] pass = null;
-        if(dbAccessPass == null)
-            pass = CipherTools.showPasswordInputPane();
-        else
-            pass = dbAccessPass.toCharArray();
-        String realPass = CipherTools.decryptByPassword(cipher, pass);
-        dataSource.setPassword(realPass);
+        if(Boolean.parseBoolean(dbaccessProtect)) {
+            char[] pass = null;
+            if(dbAccessPass == null) pass = CipherTools.showPasswordInputPane();
+            else pass = dbAccessPass.toCharArray();
+            String cipher = dataSource.getPassword();
+            String realPass = CipherTools.decryptByPassword(cipher, pass);
+            dataSource.setPassword(realPass);
+        } else {
+        	if(dbAccessPass == null) dataSource.setPassword(new String(CipherTools.showPasswordInputPane()));
+        	else dataSource.setPassword(dbAccessPass);
+        }
         return dataSource;
     }
 

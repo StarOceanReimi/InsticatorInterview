@@ -172,11 +172,7 @@ public class CipherTools {
             dialog.dispose();
         }
     }
-
-    public static void main(String[] args)  {
-//        System.out.println(Arrays.toString(showPasswordInputPane()));
-//        String pass = System.getProperty("dbaccess_pass");
-    	System.out.println(System.getProperty("dbaccess_pass"));
-        System.out.println(decryptByPassword("1Ds4aLQeV1BT21J9Si6kxRpDCw5jbMNd", "pa$$word".toCharArray()));
-    }
+    public static void main(String[] args) {
+    	
+	}
 }

@@ -1,4 +1,4 @@
-package interview;
+package me.interview.tools;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -34,12 +34,12 @@ import me.interview.entity.UserAnswer;
  * @author Li
  *
  */
-public class ServerLoadTest {
+public class PerformanceTester {
 
 	//# of client submit their answers to server at same time
 	static final int NUM_OF_CLIENTS = 100000;
 	
-	static final String API_URL = "http://localhost:8080/api/userAnswer";
+	static final String API_URL = "api/userAnswer";
 	
 	//given a constant seed to avoid changes
 	static final Random RANDOM = new Random(1000);
@@ -58,7 +58,9 @@ public class ServerLoadTest {
 		
 		final HttpEntity<String> param;
 		
-		public TestRunner(RestTemplate template, HttpEntity<String> param) {
+		final String api;
+		public TestRunner(String api, RestTemplate template, HttpEntity<String> param) {
+			this.api = api;
 			this.template = template;
 			this.param = param;
 		}
@@ -66,7 +68,7 @@ public class ServerLoadTest {
 		@Override
 		public void run() {
 			long startTime = System.currentTimeMillis();
-			ResponseEntity<String> response = template.postForEntity(API_URL, param, String.class);
+			ResponseEntity<String> response = template.postForEntity(api, param, String.class);
 			long endTime = System.currentTimeMillis();
 			assert response.getStatusCode() == HttpStatus.ACCEPTED;
 			long timespend = endTime - startTime;
@@ -83,6 +85,13 @@ public class ServerLoadTest {
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
+		String host = null;
+		if(args.length > 0) {
+			host = args[0];
+		} else {
+			host = "http://localhost:8080/";
+		}
+		String apiAddress = host+API_URL;
 		final RestTemplate userAnswerTemplate = new RestTemplate();
 		Path testFile = Paths.get(System.getProperty("user.dir"), TEST_FILE_LOC);
 		ObjectMapper mapper = new ObjectMapper()
@@ -106,7 +115,9 @@ public class ServerLoadTest {
 		long startTime = System.currentTimeMillis();
 		System.out.println("start testing...");
 		for(int i=0; i<NUM_OF_CLIENTS; i++) {
-			service.execute(new TestRunner(userAnswerTemplate, new HttpEntity<String>(randomBody(parameters), headers)));
+			service.execute(new TestRunner(apiAddress, 
+							userAnswerTemplate, 
+							new HttpEntity<String>(randomBody(parameters), headers)));
 		}
 		
 		service.shutdown();

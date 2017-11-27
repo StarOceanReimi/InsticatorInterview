@@ -53,15 +53,20 @@ public class DDLTools {
         InputStream configInput = contextLoader.getResourceAsStream("META-INF/hibernate.properties");
         hbnProp.load(configInput);
         String key = "hibernate.connection.password";
-        String cipherPassword = hbnProp.get(key).toString();
+        String dbPassProject = System.getProperty("dbaccess_protect");
         String dbAccessPass = System.getProperty("dbaccess_pass");
-        char[] pass = null;
-        if(dbAccessPass == null)
-            pass = CipherTools.showPasswordInputPane();
-        else
-            pass = dbAccessPass.toCharArray();
-        String realPassword = CipherTools.decryptByPassword(cipherPassword, pass);
-        hbnProp.setProperty(key, realPassword);
+
+        if(Boolean.parseBoolean(dbPassProject)) {
+            char[] pass = null;
+            if(dbAccessPass == null) pass = CipherTools.showPasswordInputPane();
+            else pass = dbAccessPass.toCharArray();
+        	String cipherPassword = hbnProp.get(key).toString();
+            String realPassword = CipherTools.decryptByPassword(cipherPassword, pass);
+            hbnProp.setProperty(key, realPassword);
+        } else {
+        	if(dbAccessPass == null) hbnProp.setProperty(key, new String(CipherTools.showPasswordInputPane()));
+        	else hbnProp.setProperty(key, dbAccessPass);
+        }
         MetadataSources sources = null;
         try {
 	        sources = new MetadataSources(
