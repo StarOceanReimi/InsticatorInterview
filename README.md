@@ -38,6 +38,81 @@ Used following frameworks
 
 * 400 Bad Request for reject
 * 202 Accepted    for accept With Body `application/json`
+```
+	//e.g. response for http://localhost:8080/api/getQuestions?term=gaming
+	[{
+	  "id" : 6,
+	  "title" : "Describe your favorite brand of gaming equipment.",
+	  "type" : "matrix",
+	  "index" : {
+	    "id" : 8,
+	    "name" : "Gaming Equipment",
+	    "options" : [ {
+	      "type" : "category",
+	      "id" : 28,
+	      "suggested" : false,
+	      "name" : "MousePad"
+	    }, {
+	      "type" : "category",
+	      "id" : 30,
+	      "suggested" : false,
+	      "name" : "Headphone"
+	    }, {
+	      "type" : "category",
+	      "id" : 31,
+	      "suggested" : false,
+	      "name" : "Mouse"
+	    }, {
+	      "type" : "category",
+	      "id" : 29,
+	      "suggested" : false,
+	      "name" : "Keyboard"
+	    } ]
+	  },
+	  "column" : {
+	    "id" : 7,
+	    "name" : "Gaming Equipment Brand",
+	    "options" : [ {
+	      "type" : "category",
+	      "id" : 23,
+	      "suggested" : false,
+	      "name" : "Steel Series"
+	    }, {
+	      "type" : "category",
+	      "id" : 27,
+	      "suggested" : false,
+	      "name" : "Roccat"
+	    }, {
+	      "type" : "category",
+	      "id" : 26,
+	      "suggested" : false,
+	      "name" : "Razer"
+	    }, {
+	      "type" : "category",
+	      "id" : 25,
+	      "suggested" : false,
+	      "name" : "Logitech"
+	    }, {
+	      "type" : "category",
+	      "id" : 24,
+	      "suggested" : false,
+	      "name" : "Corsair"
+	    } ]
+	  },
+	  "tags" : [ {
+	    "id" : 2,
+	    "name" : "Mouse"
+	  }, {
+	    "id" : 3,
+	    "name" : "Keyboard"
+	  }, {
+	    "id" : 1,
+	    "name" : "Gaming Equipment"
+	  } ],
+	  "createTime" : "2017-11-27T13:01:13"
+	}]
+```
+
 	
 **POST** `/api/questionUpdate` Accept Content Type `application/json`
 
