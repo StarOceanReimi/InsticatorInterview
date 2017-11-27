@@ -212,6 +212,9 @@ and the Result is:
 
 ![Data Model](Performance.PNG)
 
+**NOTES:** before running PerformanceTerster make sure use `mvn test` first, since it requires some
+data hardcoded in Testcase `me.interview.DataTest`
+
 ## Last
 
 I deployed this application at `leeq.io:8080` to see that simple question management panel
