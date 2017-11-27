@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -45,7 +46,11 @@ public class ServerLoadTest {
 	
 	static final String TEST_FILE_LOC = "testdata/questions_user_answer"; 
 
+	static AtomicLong slowUserTotalTime = new AtomicLong(0);
+	
 	static AtomicInteger counter = new AtomicInteger(0);
+	
+	static final int threshold = 500;
 	
 	static class TestRunner implements Runnable {
 
@@ -64,10 +69,12 @@ public class ServerLoadTest {
 			ResponseEntity<String> response = template.postForEntity(API_URL, param, String.class);
 			long endTime = System.currentTimeMillis();
 			assert response.getStatusCode() == HttpStatus.ACCEPTED;
-			if(endTime - startTime > 1500)
+			long timespend = endTime - startTime;
+			if(timespend > threshold) {
 				counter.incrementAndGet();
+				slowUserTotalTime.addAndGet(timespend);
+			}
 		}
-		
 	}
 	
 	static String randomBody(final String[] params) {
@@ -93,19 +100,20 @@ public class ServerLoadTest {
 			}
 		}).toArray(String[]::new);
 		
-		
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		
 		ExecutorService service = Executors.newFixedThreadPool(100);
 		long startTime = System.currentTimeMillis();
+		System.out.println("start testing...");
 		for(int i=0; i<NUM_OF_CLIENTS; i++) {
 			service.execute(new TestRunner(userAnswerTemplate, new HttpEntity<String>(randomBody(parameters), headers)));
 		}
 		
 		service.shutdown();
 		service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-		System.out.printf("%d of requests takes %d ms.\n", NUM_OF_CLIENTS, System.currentTimeMillis()-startTime);
-		System.out.printf("%d of request will be reponse over 1500ms", counter.get());
+		System.out.printf("server handles %d of requests in %d ms.\n", NUM_OF_CLIENTS, System.currentTimeMillis()-startTime);
+		System.out.printf("%d of clients will get reponsed over %dms, and their avg response time is %.2fms", 
+						   counter.get(), threshold, (double)slowUserTotalTime.get()/counter.get());
+
 	}
 }
