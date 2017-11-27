@@ -98,7 +98,7 @@ public class JPAConfig {
         factoryBean.setJpaDialect(new HibernateJpaDialect());
         factoryBean.setPersistenceUnitName(unitName);
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setShowSql(true);
+//        vendorAdapter.setShowSql(true);
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         factoryBean.setJpaProperties(additionalHibernateProperties());
         return factoryBean;

@@ -1,14 +1,12 @@
 package me.interview.controller;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.StreamSupport.stream;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import static java.util.stream.StreamSupport.stream;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -172,9 +170,9 @@ public class QuestionController {
 	
 	@RequestMapping(value="/api/userAnswer", method=RequestMethod.POST, produces="application/json", consumes="application/json")
 	ResponseEntity<String> userAnswer(@RequestBody final UserAnswer answer) throws Exception {
-		//set relation
 		if(answer.getAnswers().isEmpty()) 
 			return ResponseEntity.badRequest().build();
+		//set relation
 		answer.getAnswers().forEach(op->op.setOwner(answer));
 		Set<ConstraintViolation<UserAnswer>> constraints = validator.validate(answer);
 		if(constraints.size() > 0) {
@@ -183,7 +181,7 @@ public class QuestionController {
 		}
 		try {
 			uaRepo.save(answer);
-			
+
 			List<Long> indexIds = answer.getAnswers().stream()
 										.map(uao->uao.getIndex().getId()).collect(toList());
 			List<Long> columnIds = answer.getAnswers().stream().filter(uao->uao.getColumn() != null)

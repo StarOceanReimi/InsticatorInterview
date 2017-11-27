@@ -92,13 +92,12 @@ public class DataTest {
 		qDao.saveAll(questionsForInsert);
 	}
 	
-	@Test
 	public void testSelect() {
 		Iterable<Question> iter = qDao.findAllJoin();
 		iter.forEach(q->{
 			try {
 				String json = serviceMapper.writerWithDefaultPrettyPrinter().writeValueAsString(q);
-//				System.out.println(json);
+				System.out.println(json);
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			}
@@ -117,7 +116,6 @@ public class DataTest {
 	public void testUpdateQuestion() throws Exception {
 		for(Question question : questionsForUpdate) {
 			question.setCreateTime(LocalDateTime.now());
-			System.out.println(serviceMapper.writerWithDefaultPrettyPrinter().writeValueAsString(question));
 			qService.updateQuestion(question);
 		}
 	}
