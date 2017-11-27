@@ -7,8 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import me.interview.validator.UserAnswerOptionValidator;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @UserAnswerOptionValidator
 @Entity
 public class UserAnswerOption implements IDAware<Long> {

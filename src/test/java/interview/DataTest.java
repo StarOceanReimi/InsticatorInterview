@@ -92,6 +92,7 @@ public class DataTest {
 		qDao.saveAll(questionsForInsert);
 	}
 	
+	@Test
 	public void testSelect() {
 		Iterable<Question> iter = qDao.findAllJoin();
 		iter.forEach(q->{

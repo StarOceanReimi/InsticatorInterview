@@ -3,6 +3,9 @@ package me.interview.entity;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @DiscriminatorValue(value="RANGE")
 public class Range extends OptionValue {

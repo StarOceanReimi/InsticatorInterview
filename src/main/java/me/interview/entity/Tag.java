@@ -9,8 +9,11 @@ import javax.validation.constraints.Min;
 
 import org.hibernate.search.annotations.Field;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import me.interview.validator.TagValidator;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @TagValidator
 @Entity
 public class Tag implements IDAware<Long>, UniqueNameAware {

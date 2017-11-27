@@ -67,6 +67,31 @@ public class QuestionController {
 	private QuestionLuceneSearchService fuzzySearchService;
 
 	
+	@RequestMapping(value="/api/getQuestions", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	ResponseEntity<String> getQuestions(@RequestParam MultiValueMap<String, String> parameters) throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		String term = parameters.getFirst("term");
+		Iterable<Question> questions = null;
+		try {
+			if(term == null || term.length() == 0) {
+				questions = qRepo.findAllJoin();
+			} else {
+				try {
+					questions = fuzzySearchService.fuzzySearch(term, 1);
+				} catch (Exception e) {
+					//backup solution
+					LOGGER.warn("FUZZY SEARCH ERROR: {}", e.getMessage());
+					questions = qRepo.findAllJoin();
+				}
+			}
+			String response = mapper.writeValueAsString(questions);
+			return ResponseEntity.accepted().body(response);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
 	@RequestMapping("/")
 	ModelAndView questionManager(@RequestParam MultiValueMap<String, String> parameters) {
 		ModelAndView mv = new ModelAndView("questionManager");
@@ -146,15 +171,6 @@ public class QuestionController {
 			LOGGER.error("Error", ex);
 			return ResponseEntity.badRequest().build();
 		}
-	}
-		
-	@RequestMapping(value="/api/allQuestions", method=RequestMethod.GET, produces="application/json;charset=utf-8")
-	ResponseEntity<String> allQuestions() throws Exception {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		Iterable<Question> all = qRepo.findAllJoin();
-		String response = mapper.writeValueAsString(all);
-		return ResponseEntity.accepted().body(response);
 	}
 	
 	@RequestMapping(value="/api/deleteQuestion", method=RequestMethod.DELETE, consumes="application/json")
